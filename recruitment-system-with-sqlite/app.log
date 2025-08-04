@@ -1,0 +1,80 @@
+2025-08-04 14:56:22,718 - INFO -  ˝æ›ø‚≥ı ºªØ≥…π¶
+2025-08-04 14:56:23,200 - ERROR - º”‘ÿ ˝æ›µΩ ˝æ›ø‚ ß∞‹: UNIQUE constraint failed: companies.id
+2025-08-04 14:56:23,200 - WARNING - ∆Ù∂Ø ±º”‘ÿ ˝æ› ß∞‹: UNIQUE constraint failed: companies.id. ø…“‘…‘∫ÛÕ®π˝ /api/reload-data Ω”ø⁄÷ÿ–¬º”‘ÿ.
+2025-08-04 14:56:23,241 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-08-04 14:56:23,241 - INFO - [33mPress CTRL+C to quit[0m
+2025-08-04 14:56:23,252 - INFO -  * Restarting with watchdog (windowsapi)
+2025-08-04 14:56:24,257 - INFO -  ˝æ›ø‚≥ı ºªØ≥…π¶
+2025-08-04 14:56:24,723 - ERROR - º”‘ÿ ˝æ›µΩ ˝æ›ø‚ ß∞‹: UNIQUE constraint failed: companies.id
+2025-08-04 14:56:24,724 - WARNING - ∆Ù∂Ø ±º”‘ÿ ˝æ› ß∞‹: UNIQUE constraint failed: companies.id. ø…“‘…‘∫ÛÕ®π˝ /api/reload-data Ω”ø⁄÷ÿ–¬º”‘ÿ.
+2025-08-04 14:56:24,740 - WARNING -  * Debugger is active!
+2025-08-04 14:56:24,743 - INFO -  * Debugger PIN: 122-168-678
+2025-08-04 14:57:06,796 - INFO - 127.0.0.1 - - [04/Aug/2025 14:57:06] "GET / HTTP/1.1" 200 -
+2025-08-04 14:57:07,923 - INFO - 127.0.0.1 - - [04/Aug/2025 14:57:07] "GET /api/suitable-companies HTTP/1.1" 200 -
+2025-08-04 14:57:08,004 - INFO - 127.0.0.1 - - [04/Aug/2025 14:57:08] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-08-04 14:57:12,909 - ERROR - º”‘ÿ ˝æ›µΩ ˝æ›ø‚ ß∞‹: UNIQUE constraint failed: companies.id
+2025-08-04 14:57:12,909 - ERROR - ÷ÿ–¬º”‘ÿ ˝æ› ß∞‹: UNIQUE constraint failed: companies.id
+2025-08-04 14:57:12,912 - INFO - 127.0.0.1 - - [04/Aug/2025 14:57:12] "[35m[1mGET /api/reload-data HTTP/1.1[0m" 500 -
+2025-08-04 14:57:36,604 - INFO -  * Detected change in 'c:\\Users\\ZhuanZ\\Downloads\\recruitment-system-with-sqlite\\app.py', reloading
+2025-08-04 14:57:36,604 - INFO -  * Detected change in 'c:\\Users\\ZhuanZ\\Downloads\\recruitment-system-with-sqlite\\app.py', reloading
+2025-08-04 14:57:36,605 - INFO -  * Detected change in 'c:\\Users\\ZhuanZ\\Downloads\\recruitment-system-with-sqlite\\app.py', reloading
+2025-08-04 14:57:37,124 - INFO -  * Restarting with watchdog (windowsapi)
+2025-08-04 14:57:38,153 - INFO -  ˝æ›ø‚≥ı ºªØ≥…π¶
+2025-08-04 14:57:38,623 - ERROR - º”‘ÿ ˝æ›µΩ ˝æ›ø‚ ß∞‹: UNIQUE constraint failed: companies.id
+2025-08-04 14:57:38,624 - WARNING - ∆Ù∂Ø ±º”‘ÿ ˝æ› ß∞‹: UNIQUE constraint failed: companies.id. ø…“‘…‘∫ÛÕ®π˝ /api/reload-data Ω”ø⁄÷ÿ–¬º”‘ÿ.
+2025-08-04 14:57:38,639 - WARNING -  * Debugger is active!
+2025-08-04 14:57:38,641 - INFO -  * Debugger PIN: 122-168-678
+2025-08-04 15:04:10,407 - WARNING - ∆Ù∂Ø ±º”‘ÿ ˝æ› ß∞‹: load_data_to_db() missing 1 required positional argument: 'file_path'. ø…“‘…‘∫ÛÕ®π˝ /api/reload-data Ω”ø⁄÷ÿ–¬º”‘ÿ.
+2025-08-04 15:04:10,429 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-08-04 15:04:10,429 - INFO - [33mPress CTRL+C to quit[0m
+2025-08-04 15:04:10,439 - INFO -  * Restarting with watchdog (windowsapi)
+2025-08-04 15:04:11,498 - WARNING - ∆Ù∂Ø ±º”‘ÿ ˝æ› ß∞‹: load_data_to_db() missing 1 required positional argument: 'file_path'. ø…“‘…‘∫ÛÕ®π˝ /api/reload-data Ω”ø⁄÷ÿ–¬º”‘ÿ.
+2025-08-04 15:04:11,511 - WARNING -  * Debugger is active!
+2025-08-04 15:04:11,513 - INFO -  * Debugger PIN: 122-168-678
+2025-08-04 15:04:19,106 - INFO - 127.0.0.1 - - [04/Aug/2025 15:04:19] "GET / HTTP/1.1" 200 -
+2025-08-04 15:04:19,338 - INFO - 127.0.0.1 - - [04/Aug/2025 15:04:19] "GET /api/suitable-companies HTTP/1.1" 200 -
+2025-08-04 15:04:21,267 - INFO - 127.0.0.1 - - [04/Aug/2025 15:04:21] "GET /api/companies HTTP/1.1" 200 -
+2025-08-04 15:04:22,632 - INFO - 127.0.0.1 - - [04/Aug/2025 15:04:22] "GET /api/companies HTTP/1.1" 200 -
+2025-08-04 15:04:24,905 - ERROR - ÷ÿ–¬º”‘ÿ ˝æ› ß∞‹: load_data_to_db() missing 1 required positional argument: 'file_path'
+2025-08-04 15:04:24,906 - INFO - 127.0.0.1 - - [04/Aug/2025 15:04:24] "[35m[1mGET /api/reload-data HTTP/1.1[0m" 500 -
+2025-08-04 15:04:30,864 - ERROR - ÷ÿ–¬º”‘ÿ ˝æ› ß∞‹: load_data_to_db() missing 1 required positional argument: 'file_path'
+2025-08-04 15:04:30,865 - INFO - 127.0.0.1 - - [04/Aug/2025 15:04:30] "[35m[1mGET /api/reload-data HTTP/1.1[0m" 500 -
+2025-08-04 15:05:49,462 - INFO -  * Detected change in 'D:\\miniconda3\\Lib\\io.py', reloading
+2025-08-04 15:05:49,751 - INFO -  * Restarting with watchdog (windowsapi)
+2025-08-04 15:05:50,913 - WARNING - ∆Ù∂Ø ±º”‘ÿ ˝æ› ß∞‹: load_data_to_db() missing 1 required positional argument: 'file_path'. ø…“‘…‘∫ÛÕ®π˝ /api/reload-data Ω”ø⁄÷ÿ–¬º”‘ÿ.
+2025-08-04 15:05:50,927 - WARNING -  * Debugger is active!
+2025-08-04 15:05:50,930 - INFO -  * Debugger PIN: 122-168-678
+2025-08-04 15:07:16,238 - WARNING - ∆Ù∂Ø ±º”‘ÿ ˝æ› ß∞‹: load_data_to_db() missing 1 required positional argument: 'file_path'. ø…“‘…‘∫ÛÕ®π˝ /api/reload-data Ω”ø⁄÷ÿ–¬º”‘ÿ.
+2025-08-04 15:07:16,261 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-08-04 15:07:16,261 - INFO - [33mPress CTRL+C to quit[0m
+2025-08-04 15:07:16,273 - INFO -  * Restarting with watchdog (windowsapi)
+2025-08-04 15:07:17,326 - WARNING - ∆Ù∂Ø ±º”‘ÿ ˝æ› ß∞‹: load_data_to_db() missing 1 required positional argument: 'file_path'. ø…“‘…‘∫ÛÕ®π˝ /api/reload-data Ω”ø⁄÷ÿ–¬º”‘ÿ.
+2025-08-04 15:07:17,340 - WARNING -  * Debugger is active!
+2025-08-04 15:07:17,342 - INFO -  * Debugger PIN: 122-168-678
+2025-08-04 15:07:19,550 - INFO - 127.0.0.1 - - [04/Aug/2025 15:07:19] "GET / HTTP/1.1" 200 -
+2025-08-04 15:07:19,654 - INFO - 127.0.0.1 - - [04/Aug/2025 15:07:19] "GET /api/suitable-companies HTTP/1.1" 200 -
+2025-08-04 15:07:22,442 - INFO - 127.0.0.1 - - [04/Aug/2025 15:07:22] "GET /api/reload-data HTTP/1.1" 200 -
+2025-08-04 15:07:22,461 - INFO - 127.0.0.1 - - [04/Aug/2025 15:07:22] "GET / HTTP/1.1" 200 -
+2025-08-04 15:07:22,542 - INFO - 127.0.0.1 - - [04/Aug/2025 15:07:22] "GET /api/suitable-companies HTTP/1.1" 200 -
+2025-08-04 15:07:25,915 - INFO - 127.0.0.1 - - [04/Aug/2025 15:07:25] "GET /api/reload-data HTTP/1.1" 200 -
+2025-08-04 15:07:25,933 - INFO - 127.0.0.1 - - [04/Aug/2025 15:07:25] "GET / HTTP/1.1" 200 -
+2025-08-04 15:07:26,010 - INFO - 127.0.0.1 - - [04/Aug/2025 15:07:26] "GET /api/suitable-companies HTTP/1.1" 200 -
+2025-08-04 15:07:26,966 - INFO - 127.0.0.1 - - [04/Aug/2025 15:07:26] "GET /api/companies HTTP/1.1" 200 -
+2025-08-04 15:07:27,696 - INFO - 127.0.0.1 - - [04/Aug/2025 15:07:27] "[31m[1mGET /api/export-suitable HTTP/1.1[0m" 400 -
+2025-08-04 15:07:28,510 - INFO - 127.0.0.1 - - [04/Aug/2025 15:07:28] "GET /api/suitable-companies HTTP/1.1" 200 -
+2025-08-04 15:07:31,671 - INFO - 127.0.0.1 - - [04/Aug/2025 15:07:31] "GET /api/reload-data HTTP/1.1" 200 -
+2025-08-04 15:07:31,689 - INFO - 127.0.0.1 - - [04/Aug/2025 15:07:31] "GET / HTTP/1.1" 200 -
+2025-08-04 15:07:31,766 - INFO - 127.0.0.1 - - [04/Aug/2025 15:07:31] "GET /api/suitable-companies HTTP/1.1" 200 -
+2025-08-04 15:07:37,907 - INFO - 127.0.0.1 - - [04/Aug/2025 15:07:37] "GET / HTTP/1.1" 200 -
+2025-08-04 15:07:38,150 - INFO - 127.0.0.1 - - [04/Aug/2025 15:07:38] "GET /api/suitable-companies HTTP/1.1" 200 -
+2025-08-04 15:07:40,442 - INFO - 127.0.0.1 - - [04/Aug/2025 15:07:40] "GET /api/reload-data HTTP/1.1" 200 -
+2025-08-04 15:07:40,461 - INFO - 127.0.0.1 - - [04/Aug/2025 15:07:40] "GET / HTTP/1.1" 200 -
+2025-08-04 15:07:40,559 - INFO - 127.0.0.1 - - [04/Aug/2025 15:07:40] "GET /api/suitable-companies HTTP/1.1" 200 -
+2025-08-04 15:07:47,158 - INFO - 127.0.0.1 - - [04/Aug/2025 15:07:47] "[31m[1mGET /api/export-suitable HTTP/1.1[0m" 400 -
+2025-08-04 15:07:47,760 - INFO - 127.0.0.1 - - [04/Aug/2025 15:07:47] "GET /api/suitable-companies HTTP/1.1" 200 -
+2025-08-04 15:07:50,182 - INFO - 127.0.0.1 - - [04/Aug/2025 15:07:50] "GET /api/reload-data HTTP/1.1" 200 -
+2025-08-04 15:07:50,201 - INFO - 127.0.0.1 - - [04/Aug/2025 15:07:50] "GET / HTTP/1.1" 200 -
+2025-08-04 15:07:50,295 - INFO - 127.0.0.1 - - [04/Aug/2025 15:07:50] "GET /api/suitable-companies HTTP/1.1" 200 -

@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026届秋招公司筛选</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6',
+                        secondary: '#10B981',
+                        danger: '#EF4444',
+                        neutral: '#64748B',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .card-shadow {
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            }
+            .card-hover {
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+            }
+            .card-hover:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            }
+            .loader {
+                border-top-color: #3B82F6;
+                animation: spinner 0.6s linear infinite;
+            }
+            @keyframes spinner {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- 导航栏 -->
+    <nav class="bg-white shadow-md fixed w-full z-10 top-0">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-primary flex items-center">
+                <i class="fa fa-briefcase mr-2"></i>
+                秋招公司筛选
+            </h1>
+            <div class="flex items-center space-x-4">
+                <button id="reload-data-btn" class="text-gray-600 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition flex items-center">
+                    <i class="fa fa-refresh mr-2"></i>
+                    刷新数据
+                </button>
+                <button id="view-suitable-btn" class="bg-secondary text-white px-4 py-2 rounded-lg hover:bg-secondary/90 transition flex items-center">
+                    <i class="fa fa-check-circle mr-2"></i>
+                    查看合适公司
+                </button>
+                <button id="export-btn" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition flex items-center">
+                    <i class="fa fa-download mr-2"></i>
+                    导出合适公司
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主内容区 -->
+    <main class="container mx-auto px-4 pt-24 pb-16">
+        <!-- 数据加载状态 -->
+        <div id="loading-indicator" class="fixed inset-0 bg-white bg-opacity-80 flex items-center justify-center z-50 hidden">
+            <div class="flex flex-col items-center">
+                <div class="loader w-12 h-12 rounded-full border-4 border-gray-200 mb-4"></div>
+                <p class="text-gray-600 text-lg">正在加载数据，请稍候...</p>
+            </div>
+        </div>
+
+        <!-- 筛选区域 -->
+        <div class="bg-white rounded-xl shadow-md p-6 mb-8">
+            <h2 class="text-xl font-semibold mb-4 flex items-center">
+                <i class="fa fa-filter text-primary mr-2"></i>
+                筛选条件
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <label for="industry" class="block text-sm font-medium text-gray-700 mb-1">行业大类</label>
+                    <select id="industry" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary">
+                        <option value="all">所有行业</option>
+                        {% for industry in industries %}
+                        <option value="{{ industry }}">{{ industry }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label for="company-type" class="block text-sm font-medium text-gray-700 mb-1">企业性质</label>
+                    <select id="company-type" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary">
+                        <option value="all">所有性质</option>
+                        {% for type in company_types %}
+                        <option value="{{ type }}">{{ type }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label for="location" class="block text-sm font-medium text-gray-700 mb-1">工作地点</label>
+                    <select id="location" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary">
+                        <option value="all">所有地点</option>
+                        {% for loc in locations %}
+                        <option value="{{ loc }}">{{ loc }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label for="qiyexing" class="block text-sm font-medium text-gray-700 mb-1">招聘对象</label>
+                    <select id="qiyexing" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary">
+                        <option value="all">所有对象</option>
+                        {% for qy in qiyexingz %}
+                        <option value="{{ qy }}">{{ qy }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label for="jiezhi" class="block text-sm font-medium text-gray-700 mb-1">截至时间</label>
+                    <select id="jiezhi" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary">
+                        <option value="all">所有时间</option>
+                        {% for jz in jiezhi %}
+                        <option value="{{ jz }}">{{ jz }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="mt-4 flex justify-end">
+                <button id="filter-btn" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition mr-2">
+                    <i class="fa fa-search mr-1"></i> 筛选
+                </button>
+                <button id="reset-filter" class="text-gray-600 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition">
+                    重置筛选
+                </button>
+            </div>
+        </div>
+
+        <!-- 公司列表区域 -->
+        <div id="company-list-view">
+            <h2 class="text-xl font-semibold mb-6 flex items-center">
+                <i class="fa fa-building text-primary mr-2"></i>
+                可用公司列表
+                <span id="company-count" class="ml-2 bg-gray-200 text-gray-700 text-sm px-2 py-1 rounded-full">
+                    {{ companies|length }} 家公司
+                </span>
+            </h2>
+            
+            <div id="companies-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {% for company in companies %}
+                <div class="bg-white rounded-xl overflow-hidden card-shadow card-hover" data-id="{{ company.id }}">
+                    <div class="p-5">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="text-lg font-bold text-gray-800">{{ company.company_name }}</h3>
+                            <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
+                                {{ company.batch }}
+                            </span>
+                        </div>
+                        
+                        <div class="space-y-2 text-sm">
+                            <div class="flex items-center text-gray-600">
+                                <i class="fa fa-building-o w-5 text-gray-400"></i>
+                                <span>{{ company.company_type }}</span>
+                            </div>
+                            <div class="flex items-center text-gray-600">
+                                <i class="fa fa-industry w-5 text-gray-400"></i>
+                                <span>{{ company.industry }}</span>
+                            </div>
+                            <div class="flex items-center text-gray-600">
+                                <i class="fa fa-map-marker w-5 text-gray-400"></i>
+                                <span>{{ company.location }}</span>
+                            </div>
+                            <div class="flex items-center text-gray-600">
+                                <i class="fa fa-clock-o w-5 text-gray-400"></i>
+                                <span>截止: {{ company.deadline }}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4 pt-4 border-t border-gray-100">
+                            <div class="flex justify-between">
+                                <button class="view-details-btn text-primary hover:text-primary/80 text-sm font-medium flex items-center" data-id="{{ company.id }}">
+                                    <i class="fa fa-info-circle mr-1"></i> 详情
+                                </button>
+                                <div class="space-x-2">
+                                    <button class="mark-suitable-btn bg-secondary text-white px-3 py-1 rounded text-sm hover:bg-secondary/90 transition" data-id="{{ company.id }}">
+                                        合适
+                                    </button>
+                                    <button class="mark-unsuitable-btn bg-danger text-white px-3 py-1 rounded text-sm hover:bg-danger/90 transition" data-id="{{ company.id }}">
+                                        不合适
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- 合适公司列表区域 -->
+        <div id="suitable-list-view" class="hidden">
+            <h2 class="text-xl font-semibold mb-6 flex items-center">
+                <i class="fa fa-check-circle text-secondary mr-2"></i>
+                合适的公司
+                <span id="suitable-count" class="ml-2 bg-gray-200 text-gray-700 text-sm px-2 py-1 rounded-full">
+                    0 家公司
+                </span>
+                <button id="back-to-list" class="ml-4 text-primary hover:text-primary/80 text-sm flex items-center">
+                    <i class="fa fa-arrow-left mr-1"></i> 返回列表
+                </button>
+            </h2>
+            
+            <div id="suitable-companies-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- 合适的公司会通过JavaScript动态加载到这里 -->
+            </div>
+        </div>
+
+        <!-- 公司详情模态框 -->
+        <div id="company-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+            <div class="bg-white rounded-xl max-w-2xl w-full max-h-[80vh] overflow-y-auto m-4">
+                <div class="p-6 border-b border-gray-200">
+                    <div class="flex justify-between items-center">
+                        <h3 id="modal-title" class="text-xl font-bold text-gray-800">公司详情</h3>
+                        <button id="close-modal" class="text-gray-500 hover:text-gray-700">
+                            <i class="fa fa-times text-xl"></i>
+                        </button>
+                    </div>
+                </div>
+                <div id="modal-content" class="p-6 space-y-4">
+                    <!-- 公司详情会通过JavaScript动态加载到这里 -->
+                </div>
+                <div class="p-6 border-t border-gray-200 flex justify-end space-x-3">
+                    <button id="modal-unsuitable" class="bg-danger text-white px-4 py-2 rounded-lg hover:bg-danger/90 transition">
+                        不合适
+                    </button>
+                    <button id="modal-suitable" class="bg-secondary text-white px-4 py-2 rounded-lg hover:bg-secondary/90 transition">
+                        合适
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 通知提示 -->
+        <div id="notification" class="fixed bottom-5 right-5 px-6 py-3 rounded-lg shadow-lg transform translate-y-20 opacity-0 transition-all duration-300 flex items-center">
+            <i id="notification-icon" class="mr-2 text-xl"></i>
+            <span id="notification-message"></span>
+        </div>
+    </main>
+
+    <script>
+        // 安全的JSON解析
+        function safeJsonParse(jsonString) {
+            try {
+                return JSON.parse(jsonString);
+            } catch (e) {
+                console.error("JSON解析错误:", e);
+                console.error("原始JSON字符串:", jsonString);
+                throw e;
+            }
+        }
+        
+        // 安全的fetch函数
+        async function safeFetch(url, options = {}) {
+            try {
+                const response = await fetch(url, options);
+                
+                if (!response.ok) {
+                    let errorData;
+                    try {
+                        errorData = await response.json();
+                    } catch (e) {
+                        errorData = { error: `HTTP错误: ${response.status}` };
+                    }
+                    throw new Error(errorData.error || errorData.message || `请求失败 (${response.status})`);
+                }
+                
+                if (response.status === 204) {
+                    return null;
+                }
+                
+                const text = await response.text();
+                if (!text.trim()) {
+                    return {};
+                }
+                
+                return safeJsonParse(text);
+            } catch (e) {
+                console.error(`请求 ${url} 失败:`, e);
+                throw e;
+            }
+        }
+        
+        // 全局变量
+        let currentCompanyId = null;
+        let isLoading = false;
+        
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSuitableCount();
+            
+            // 事件监听
+            document.getElementById('filter-btn').addEventListener('click', filterCompanies);
+            document.getElementById('industry').addEventListener('change', filterCompanies);
+            document.getElementById('company-type').addEventListener('change', filterCompanies);
+            document.getElementById('location').addEventListener('change', filterCompanies);
+            document.getElementById('qiyexing').addEventListener('change', filterCompanies);
+            document.getElementById('jiezhi').addEventListener('change', filterCompanies);
+            document.getElementById('reset-filter').addEventListener('click', resetFilter);
+            document.getElementById('view-suitable-btn').addEventListener('click', viewSuitableCompanies);
+            document.getElementById('back-to-list').addEventListener('click', backToList);
+            document.getElementById('export-btn').addEventListener('click', exportSuitableCompanies);
+            document.getElementById('reload-data-btn').addEventListener('click', reloadData);
+            
+            // 公司卡片事件委托
+            document.getElementById('companies-container').addEventListener('click', handleCompanyCardClick);
+            document.getElementById('suitable-companies-container').addEventListener('click', handleSuitableCompanyCardClick);
+            
+            // 模态框按钮
+            document.getElementById('close-modal').addEventListener('click', closeModal);
+            document.getElementById('modal-suitable').addEventListener('click', modalMarkSuitable);
+            document.getElementById('modal-unsuitable').addEventListener('click', modalMarkUnsuitable);
+        });
+        
+        // 显示加载指示器
+        function showLoading() {
+            if (!isLoading) {
+                isLoading = true;
+                document.getElementById('loading-indicator').classList.remove('hidden');
+            }
+        }
+        
+        // 隐藏加载指示器
+        function hideLoading() {
+            isLoading = false;
+            document.getElementById('loading-indicator').classList.add('hidden');
+        }
+        
+        // 筛选公司
+        function filterCompanies() {
+            if (isLoading) return;
+            
+            showLoading();
+            
+            const industry = document.getElementById('industry').value;
+            const companyType = document.getElementById('company-type').value;
+            const location = document.getElementById('location').value;
+            const qiyexing = document.getElementById('qiyexing').value;
+            const jiezhi = document.getElementById('jiezhi').value;
+            
+            const params = new URLSearchParams();
+            if (industry !== 'all') params.append('industry', industry);
+            if (companyType !== 'all') params.append('type', companyType);
+            if (location !== 'all') params.append('location', location);
+            if (qiyexing !== 'all') params.append('qiyexing', qiyexing);
+            if (jiezhi !== 'all') params.append('jie', jiezhi);
+            
+            safeFetch(`/api/companies?${params.toString()}`)
+                .then(companies => {
+                    renderCompanies(companies);
+                    document.getElementById('company-count').textContent = `${companies.length} 家公司`;
+                })
+                .catch(error => {
+                    console.error('筛选错误:', error);
+                    showNotification(`筛选失败: ${error.message}`, 'error');
+                })
+                .finally(() => {
+                    hideLoading();
+                });
+        }
+        
+        // 重置筛选
+        function resetFilter() {
+            document.getElementById('industry').value = 'all';
+            document.getElementById('company-type').value = 'all';
+            document.getElementById('location').value = 'all';
+            document.getElementById('qiyexing').value = 'all';
+            document.getElementById('jiezhi').value = 'all';
+            filterCompanies();
+        }
+        
+        // 渲染公司列表
+        function renderCompanies(companies) {
+            const container = document.getElementById('companies-container');
+            container.innerHTML = '';
+            
+            if (!companies || companies.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full text-center py-12">
+                        <i class="fa fa-search text-gray-300 text-5xl mb-4"></i>
+                        <p class="text-gray-500">没有找到符合条件的公司</p>
+                        <button onclick="resetFilter()" class="mt-4 text-primary hover:underline">
+                            重置筛选条件
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+            
+            companies.forEach(company => {
+                const card = document.createElement('div');
+                card.className = 'bg-white rounded-xl overflow-hidden card-shadow card-hover';
+                card.setAttribute('data-id', company.id);
+                
+                card.innerHTML = `
+                    <div class="p-5">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="text-lg font-bold text-gray-800">${company.company_name || '未知公司'}</h3>
+                            <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
+                                ${company.batch || '未知'}
+                            </span>
+                        </div>
+                        
+                        <div class="space-y-2 text-sm">
+                            <div class="flex items-center text-gray-600">
+                                <i class="fa fa-building-o w-5 text-gray-400"></i>
+                                <span>${company.company_type || '未知'}</span>
+                            </div>
+                            <div class="flex items-center text-gray-600">
+                                <i class="fa fa-industry w-5 text-gray-400"></i>
+                                <span>${company.industry || '未知'}</span>
+                            </div>
+                            <div class="flex items-center text-gray-600">
+                                <i class="fa fa-map-marker w-5 text-gray-400"></i>
+                                <span>${company.location || '未知'}</span>
+                            </div>
+                            <div class="flex items-center text-gray-600">
+                                <i class="fa fa-clock-o w-5 text-gray-400"></i>
+                                <span>截止: ${company.deadline || '未知'}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4 pt-4 border-t border-gray-100">
+                            <div class="flex justify-between">
+                                <button class="view-details-btn text-primary hover:text-primary/80 text-sm font-medium flex items-center" data-id="${company.id}">
+                                    <i class="fa fa-info-circle mr-1"></i> 详情
+                                </button>
+                                <div class="space-x-2">
+                                    <button class="mark-suitable-btn bg-secondary text-white px-3 py-1 rounded text-sm hover:bg-secondary/90 transition" data-id="${company.id}">
+                                        合适
+                                    </button>
+                                    <button class="mark-unsuitable-btn bg-danger text-white px-3 py-1 rounded text-sm hover:bg-danger/90 transition" data-id="${company.id}">
+                                        不合适
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                container.appendChild(card);
+            });
+        }
+        
+        // 查看公司详情
+        function viewCompanyDetails(companyId) {
+            if (isLoading) return;
+            
+            currentCompanyId = companyId;
+            showLoading();
+            
+            safeFetch(`/api/company/${companyId}`)
+                .then(company => {
+                    if (!company) {
+                        throw new Error('未找到公司信息');
+                    }
+                    
+                    document.getElementById('modal-title').textContent = company.company_name || '公司详情';
+                    
+                    const details = `
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <h4 class="text-sm font-semibold text-gray-500 uppercase mb-2">基本信息</h4>
+                                <div class="space-y-2">
+                                    <div class="flex">
+                                        <span class="text-gray-600 w-20">序号:</span>
+                                        <span class="text-gray-800">${company.id || '-'}</span>
+                                    </div>
+                                    <div class="flex">
+                                        <span class="text-gray-600 w-20">批次:</span>
+                                        <span class="text-gray-800">${company.batch || '-'}</span>
+                                    </div>
+                                    <div class="flex">
+                                        <span class="text-gray-600 w-20">企业性质:</span>
+                                        <span class="text-gray-800">${company.company_type || '-'}</span>
+                                    </div>
+                                    <div class="flex">
+                                        <span class="text-gray-600 w-20">行业:</span>
+                                        <span class="text-gray-800">${company.industry || '-'}</span>
+                                    </div>
+                                    <div class="flex">
+                                        <span class="text-gray-600 w-20">工作地点:</span>
+                                        <span class="text-gray-800">${company.location || '-'}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-semibold text-gray-500 uppercase mb-2">招聘信息</h4>
+                                <div class="space-y-2">
+                                    <div class="flex">
+                                        <span class="text-gray-600 w-20">招聘对象:</span>
+                                        <span class="text-gray-800">${company.recruitment_target || '-'}</span>
+                                    </div>
+                                    <div class="flex">
+                                        <span class="text-gray-600 w-20">更新时间:</span>
+                                        <span class="text-gray-800">${company.update_time || '-'}</span>
+                                    </div>
+                                    <div class="flex">
+                                        <span class="text-gray-600 w-20">截止时间:</span>
+                                        <span class="text-gray-800">${company.deadline || '-'}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h4 class="text-sm font-semibold text-gray-500 uppercase mb-2">招聘岗位</h4>
+                            <div class="bg-gray-50 p-3 rounded-lg text-gray-800">
+                                ${company.positions ? company.positions.replace(/；/g, '；<br>') : '-'}
+                            </div>
+                        </div>
+                        
+                        ${company.official_announcement ? `
+                        <div>
+                            <h4 class="text-sm font-semibold text-gray-500 uppercase mb-2">官方公告</h4>
+                            <div class="text-gray-800">${company.official_announcement}</div>
+                        </div>
+                        ` : ''}
+                        
+                        ${company.application_method ? `
+                        <div>
+                            <h4 class="text-sm font-semibold text-gray-500 uppercase mb-2">投递方式</h4>
+                            <div class="text-primary">${company.application_method}</div>
+                        </div>
+                        ` : ''}
+                        
+                        ${company.referral_code ? `
+                        <div>
+                            <h4 class="text-sm font-semibold text-gray-500 uppercase mb-2">内推码</h4>
+                            <div class="bg-yellow-50 p-3 rounded-lg text-yellow-800 font-mono">${company.referral_code}</div>
+                        </div>
+                        ` : ''}
+                    `;
+                    
+                    document.getElementById('modal-content').innerHTML = details;
+                    document.getElementById('company-modal').classList.remove('hidden');
+                })
+                .catch(error => {
+                    console.error('获取公司详情失败:', error);
+                    showNotification(`获取详情失败: ${error.message}`, 'error');
+                })
+                .finally(() => {
+                    hideLoading();
+                });
+        }
+        
+        // 标记公司
+        function markCompany(companyId, suitable) {
+            if (isLoading) return;
+            
+            showLoading();
+            
+            safeFetch('/api/mark', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id: companyId, suitable: suitable })
+            })
+            .then(data => {
+                filterCompanies();
+                
+                if (!document.getElementById('suitable-list-view').classList.contains('hidden')) {
+                    loadSuitableCompanies();
+                }
+                
+                loadSuitableCount();
+                
+                const companyName = document.querySelector(`[data-id="${companyId}"] h3`)?.textContent || '该公司';
+                showNotification(`${companyName} 已标记为${suitable ? '合适' : '不合适'}`, 'success');
+            })
+            .catch(error => {
+                console.error('标记公司失败:', error);
+                showNotification(`标记失败: ${error.message}`, 'error');
+            })
+            .finally(() => {
+                hideLoading();
+            });
+        }
+        
+        // 查看合适的公司
+        function viewSuitableCompanies() {
+            document.getElementById('company-list-view').classList.add('hidden');
+            document.getElementById('suitable-list-view').classList.remove('hidden');
+            loadSuitableCompanies();
+        }
+        
+        // 返回公司列表
+        function backToList() {
+            document.getElementById('suitable-list-view').classList.add('hidden');
+            document.getElementById('company-list-view').classList.remove('hidden');
+        }
+        
+        // 加载合适的公司
+        function loadSuitableCompanies() {
+            if (isLoading) return;
+            
+            showLoading();
+            
+            safeFetch('/api/suitable-companies')
+                .then(companies => {
+                    const container = document.getElementById('suitable-companies-container');
+                    container.innerHTML = '';
+                    
+                    document.getElementById('suitable-count').textContent = `${companies?.length || 0} 家公司`;
+                    
+                    if (!companies || companies.length === 0) {
+                        container.innerHTML = `
+                            <div class="col-span-full text-center py-12">
+                                <i class="fa fa-check-circle text-gray-300 text-5xl mb-4"></i>
+                                <p class="text-gray-500">还没有标记为合适的公司</p>
+                                <button id="back-to-main" class="mt-4 bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition">
+                                    返回公司列表
+                                </button>
+                            </div>
+                        `;
+                        
+                        document.getElementById('back-to-main').addEventListener('click', backToList);
+                        return;
+                    }
+                    
+                    companies.forEach(company => {
+                        const card = document.createElement('div');
+                        card.className = 'bg-white rounded-xl overflow-hidden card-shadow card-hover';
+                        card.setAttribute('data-id', company.id);
+                        
+                        card.innerHTML = `
+                            <div class="p-5">
+                                <div class="flex justify-between items-start mb-3">
+                                    <h3 class="text-lg font-bold text-gray-800">${company.company_name || '未知公司'}</h3>
+                                    <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">
+                                        已标记
+                                    </span>
+                                </div>
+                                
+                                <div class="space-y-2 text-sm">
+                                    <div class="flex items-center text-gray-600">
+                                        <i class="fa fa-building-o w-5 text-gray-400"></i>
+                                        <span>${company.company_type || '未知'}</span>
+                                    </div>
+                                    <div class="flex items-center text-gray-600">
+                                        <i class="fa fa-industry w-5 text-gray-400"></i>
+                                        <span>${company.industry || '未知'}</span>
+                                    </div>
+                                    <div class="flex items-center text-gray-600">
+                                        <i class="fa fa-map-marker w-5 text-gray-400"></i>
+                                        <span>${company.location || '未知'}</span>
+                                    </div>
+                                    <div class="flex items-center text-gray-600">
+                                        <i class="fa fa-clock-o w-5 text-gray-400"></i>
+                                        <span>截止: ${company.deadline || '未知'}</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-4 pt-4 border-t border-gray-100">
+                                    <div class="flex justify-end">
+                                        <button class="view-details-btn text-primary hover:text-primary/80 text-sm font-medium flex items-center" data-id="${company.id}">
+                                            <i class="fa fa-info-circle mr-1"></i> 详情
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        
+                        container.appendChild(card);
+                    });
+                })
+                .catch(error => {
+                    console.error('加载合适公司失败:', error);
+                    showNotification(`加载合适公司失败: ${error.message}`, 'error');
+                })
+                .finally(() => {
+                    hideLoading();
+                });
+        }
+        
+        // 加载合适的公司数量
+        function loadSuitableCount() {
+            safeFetch('/api/suitable-companies')
+                .then(companies => {
+                    document.getElementById('suitable-count').textContent = `${companies?.length || 0} 家公司`;
+                })
+                .catch(error => {
+                    console.error('获取合适公司数量失败:', error);
+                });
+        }
+        
+        // 导出合适的公司
+        function exportSuitableCompanies() {
+            if (isLoading) return;
+            
+            showLoading();
+            
+            fetch('/api/export-suitable')
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(data => {
+                            throw new Error(data.message || `导出失败`);
+                        }).catch(() => {
+                            throw new Error(`导出失败`);
+                        });
+                    }
+                    return response.blob();
+                })
+                .then(blob => {
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `合适的公司_${new Date().toISOString().slice(0,10)}.xlsx`;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    showNotification('导出成功', 'success');
+                })
+                .catch(error => {
+                    console.error('导出失败:', error);
+                    showNotification(`导出失败: ${error.message}`, 'error');
+                })
+                .finally(() => {
+                    hideLoading();
+                });
+        }
+        
+        // 重新加载数据
+        function reloadData() {
+            if (isLoading) return;
+            
+            if (confirm('确定要重新加载数据吗？这将覆盖当前的标记信息。')) {
+                showLoading();
+                
+                safeFetch('/api/reload-data')
+                    .then(data => {
+                        showNotification(data.message, 'success');
+                        // 重新加载页面
+                        window.location.reload();
+                    })
+                    .catch(error => {
+                        console.error('重新加载数据失败:', error);
+                        showNotification(`刷新数据失败: ${error.message}`, 'error');
+                    })
+                    .finally(() => {
+                        hideLoading();
+                    });
+            }
+        }
+        
+        // 关闭模态框
+        function closeModal() {
+            document.getElementById('company-modal').classList.add('hidden');
+            currentCompanyId = null;
+        }
+        
+        // 模态框标记合适
+        function modalMarkSuitable() {
+            if (currentCompanyId) {
+                markCompany(currentCompanyId, true);
+                closeModal();
+            }
+        }
+        
+        // 模态框标记不合适
+        function modalMarkUnsuitable() {
+            if (currentCompanyId) {
+                markCompany(currentCompanyId, false);
+                closeModal();
+            }
+        }
+        
+        // 处理公司卡片点击
+        function handleCompanyCardClick(e) {
+            if (e.target.closest('.mark-suitable-btn')) {
+                const btn = e.target.closest('.mark-suitable-btn');
+                const companyId = parseInt(btn.getAttribute('data-id'));
+                markCompany(companyId, true);
+            } else if (e.target.closest('.mark-unsuitable-btn')) {
+                const btn = e.target.closest('.mark-unsuitable-btn');
+                const companyId = parseInt(btn.getAttribute('data-id'));
+                markCompany(companyId, false);
+            } else if (e.target.closest('.view-details-btn')) {
+                const btn = e.target.closest('.view-details-btn');
+                const companyId = parseInt(btn.getAttribute('data-id'));
+                viewCompanyDetails(companyId);
+            }
+        }
+        
+        // 处理合适公司卡片点击
+        function handleSuitableCompanyCardClick(e) {
+            if (e.target.closest('.view-details-btn')) {
+                const btn = e.target.closest('.view-details-btn');
+                const companyId = parseInt(btn.getAttribute('data-id'));
+                viewCompanyDetails(companyId);
+            }
+        }
+        
+        // 显示通知
+        function showNotification(message, type = 'info') {
+            const notification = document.getElementById('notification');
+            const icon = document.getElementById('notification-icon');
+            const messageEl = document.getElementById('notification-message');
+            
+            notification.className = 'fixed bottom-5 right-5 px-6 py-3 rounded-lg shadow-lg transform translate-y-20 opacity-0 transition-all duration-300 flex items-center z-50';
+            if (type === 'success') {
+                notification.classList.add('bg-green-50', 'text-green-800', 'border-l-4', 'border-green-500');
+                icon.className = 'fa fa-check-circle mr-2 text-xl text-green-500';
+            } else if (type === 'error') {
+                notification.classList.add('bg-red-50', 'text-red-800', 'border-l-4', 'border-red-500');
+                icon.className = 'fa fa-exclamation-circle mr-2 text-xl text-red-500';
+            } else {
+                notification.classList.add('bg-blue-50', 'text-blue-800', 'border-l-4', 'border-blue-500');
+                icon.className = 'fa fa-info-circle mr-2 text-xl text-blue-500';
+            }
+            
+            messageEl.textContent = message;
+            
+            setTimeout(() => {
+                notification.classList.remove('translate-y-20', 'opacity-0');
+            }, 10);
+            
+            setTimeout(() => {
+                notification.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
+    
